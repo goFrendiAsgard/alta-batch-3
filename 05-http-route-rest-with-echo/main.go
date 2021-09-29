@@ -50,7 +50,7 @@ func main() {
 	// }'
 	e.POST("books/", func(c echo.Context) error {
 		bookWithCode := BookWithCode{}
-		if err := c.Bind(bookWithCode); err != nil {
+		if err := c.Bind(&bookWithCode); err != nil {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")
 		}
@@ -70,7 +70,7 @@ func main() {
 	e.PUT("books/:code", func(c echo.Context) error {
 		bookCode := c.Param("code")
 		book := Book{}
-		if err := c.Bind(book); err != nil {
+		if err := c.Bind(&book); err != nil {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")
 		}
