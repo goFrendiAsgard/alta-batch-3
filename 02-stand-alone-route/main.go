@@ -17,10 +17,12 @@ func main() {
 		"002": {Title: "Harry Potter", Author: "J.K. Rowling"},
 		"003": {Title: "The Lord of The Ring", Author: "J.R.R. Tolkien"},
 	}
-serve:
 	for {
 		fmt.Println("1. Get book\n2. Add book\n3. Exit")
 		userInput := Scanln()
+		if userInput == "3" {
+			break
+		}
 		switch userInput {
 		case "1":
 			fmt.Println("Book Code: ")
@@ -40,9 +42,6 @@ serve:
 			fmt.Println("New Book Author: ")
 			newBook.Author = Scanln()
 			books[newBookCode] = newBook
-		case "3":
-			break serve
-		}
 	}
 }
 
