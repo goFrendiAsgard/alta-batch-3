@@ -42,6 +42,7 @@ func main() {
 			fmt.Println("New Book Author: ")
 			newBook.Author = Scanln()
 			books[newBookCode] = newBook
+		}
 	}
 }
 
