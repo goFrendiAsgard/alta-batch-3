@@ -80,7 +80,7 @@ func main() {
 				WriteInternalServerError(w, err)
 				return
 			}
-			w.WriteHeader(200)
+			w.WriteHeader(201)
 			w.Write(jsonBook)
 			return
 
