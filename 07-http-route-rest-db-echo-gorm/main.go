@@ -65,10 +65,13 @@ func main() {
 	// }'
 	e.POST("books/", func(c echo.Context) error {
 		book := Book{}
+		// fmt.Printf("Book sebelum bind %#v\n", book)
 		if err := c.Bind(&book); err != nil {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")
 		}
+		// fmt.Printf("Book setelah bind %#v\n", book)
+		fmt.Printf("Before insert: %#v\n", book)
 		if err := db.Save(&book).Error; err != nil {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")
@@ -100,6 +103,7 @@ func main() {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")
 		}
+		fmt.Printf("Before update: %#v\n", book)
 		if err := db.Save(&book).Error; err != nil {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")

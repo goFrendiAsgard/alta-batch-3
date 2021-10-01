@@ -32,14 +32,14 @@ func main() {
 
 	e := echo.New()
 
-	// curl --location --request GET 'http://localhost:8080/books/001'
+	// curl --location --request GET 'http://localhost:8080/books/1'
 	e.GET("/books/:code", func(c echo.Context) error {
 		bookId := c.Param("code")
 		results, err := db.Query("SELECT id, title, author FROM books WHERE id=?", bookId)
 		// Contoh SQL injection
 		// results, err := db.Query("SELECT id, title, author FROM books WHERE id=" + bookId)
-		// bookId == '1 or 1=1; DELETE FROM books;'
-		// SELECT id, title, author FROM books WHERE id=1 or 1=1; DELETE FROM books--
+		// bookId == '1; DROP TABLE books;'
+		// SELECT id, title, author FROM books WHERE id=1; DELETE FROM books;
 		if err != nil {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")
@@ -98,7 +98,7 @@ func main() {
 		return c.JSON(http.StatusOK, bookData)
 	})
 
-	// curl --location --request PUT 'http://localhost:8080/books/004' \
+	// curl --location --request PUT 'http://localhost:8080/books/4' \
 	// --header 'Content-Type: application/json' \
 	// --data-raw '{
 	//     "title": "Naruto",
