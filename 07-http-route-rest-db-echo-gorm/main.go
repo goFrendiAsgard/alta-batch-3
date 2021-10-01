@@ -24,6 +24,8 @@ func main() {
 	}
 	db.AutoMigrate(&Book{})
 
+	// https://github.com/go-gorm/gorm/issues/3145#issuecomment-658230163
+
 	e := echo.New()
 
 	// curl --location --request GET 'http://localhost:8080/books/1'
