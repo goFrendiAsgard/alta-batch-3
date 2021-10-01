@@ -54,7 +54,7 @@ func main() {
 	})
 
 	// curl --location --request GET 'http://localhost:8080/books/'
-	e.GET("/books", func(c echo.Context) error {
+	e.GET("/books/", func(c echo.Context) error {
 		books := []Book{}
 		results, err := db.Query("SELECT id, title, author FROM books")
 		if err != nil {

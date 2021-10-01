@@ -45,7 +45,7 @@ func main() {
 	})
 
 	// curl --location --request GET 'http://localhost:8080/books/'
-	e.GET("/books", func(c echo.Context) error {
+	e.GET("/books/", func(c echo.Context) error {
 		var books []Book
 		if err := db.Find(&books).Error; err != nil {
 			fmt.Println(err)
@@ -120,7 +120,7 @@ func main() {
 		if book.ID == 0 {
 			return c.String(http.StatusNotFound, "book not found")
 		}
-		if err := db.Delete(book); err != nil {
+		if err := db.Delete(&book).Error; err != nil {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")
 		}
