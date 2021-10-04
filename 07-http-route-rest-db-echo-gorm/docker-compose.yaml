@@ -1,8 +1,7 @@
 services:
 
   db:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
+    image: bitnami/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: toor

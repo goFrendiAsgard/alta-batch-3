@@ -1,6 +1,11 @@
 package model
 
+import "gorm.io/gorm"
+
 type Person struct {
-	Name    string
-	Address string
+	*gorm.Model
+	Name     string `json:"name"`
+	Address  string `json:"address"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
