@@ -91,7 +91,9 @@ func main() {
 			fmt.Println(err)
 			return c.String(http.StatusBadRequest, "invalid id")
 		}
+		fmt.Println("Isi bookId ", bookId)
 		var book Book
+		fmt.Printf("Isi book sebelum select %#v\n", book)
 		if err := db.First(&book, bookId).Error; err != nil {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")
@@ -99,10 +101,12 @@ func main() {
 		if book.ID == 0 {
 			return c.String(http.StatusNotFound, "book not found")
 		}
+		fmt.Printf("Isi book setelah select %#v\n", book)
 		if err := c.Bind(&book); err != nil {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "internal server error")
 		}
+		fmt.Printf("Isi book setelah bind %#v\n", book)
 		fmt.Printf("Before update: %#v\n", book)
 		if err := db.Save(&book).Error; err != nil {
 			fmt.Println(err)
