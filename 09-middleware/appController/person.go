@@ -5,22 +5,51 @@ import (
 	"net/http"
 	"strconv"
 
+	"gofrendi/structureExample/appMiddleware"
 	"gofrendi/structureExample/appModel"
 
 	"github.com/labstack/echo/v4"
 )
 
-type PersonController struct {
-	model appModel.PersonModel
+type LoginInfo struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
-func NewPersonController(m appModel.PersonModel) PersonController {
-	return PersonController{model: m}
+type PersonController struct {
+	model     appModel.PersonModel
+	jwtSecret string
+}
+
+func NewPersonController(jwtSecret string, m appModel.PersonModel) PersonController {
+	return PersonController{
+		jwtSecret: jwtSecret,
+		model:     m,
+	}
+}
+
+func (pc PersonController) Login(c echo.Context) error {
+	loginInfo := LoginInfo{}
+	c.Bind(&loginInfo)
+	person, err := pc.model.GetByEmailAndPassword(loginInfo.Email, loginInfo.Password)
+	if err != nil {
+		fmt.Println(err)
+		return c.String(http.StatusBadRequest, "cannot login")
+	}
+	token, err := appMiddleware.CreateToken(int(person.ID), pc.jwtSecret)
+	if err != nil {
+		fmt.Println(err)
+		return c.String(http.StatusBadRequest, "cannot login")
+	}
+	person.Token = token
+	pc.model.Edit(int(person.ID), person)
+	return c.JSON(http.StatusOK, person)
 }
 
 func (pc PersonController) GetAll(c echo.Context) error {
 	allPersons, err := pc.model.GetAll()
 	if err != nil {
+		fmt.Println(err)
 		return c.String(http.StatusInternalServerError, "cannot get persons")
 	}
 	return c.JSON(http.StatusOK, allPersons)

@@ -9,6 +9,7 @@ type Config struct {
 	HttpPort         int
 	ConnectionString string
 	Storage          string // "db" or "mem"
+	JwtSecret        string
 }
 
 func NewConfig() (Config, error) {
@@ -22,6 +23,7 @@ func NewConfig() (Config, error) {
 		HttpPort:         httpPort,
 		ConnectionString: getEnv("CONNECTION_STRING", "root:toor@tcp(localhost:3306)/alta?charset=utf8&parseTime=True&loc=Local"),
 		Storage:          getEnv("STORAGE", "db"), // "db" or "mem"
+		JwtSecret:        getEnv("JWT_SECRET", "rahasiaBanget"),
 	}, nil
 }
 

@@ -34,7 +34,7 @@ func main() {
 	// create new echo instant
 	e := echo.New()
 	appMiddleware.AddGlobalMiddlewares(e)
-	appRoute.HandleRoutes(e, personModel)
+	appRoute.HandleRoutes(e, cfg.JwtSecret, personModel)
 
 	if err = e.Start(fmt.Sprintf(":%d", cfg.HttpPort)); err != nil {
 		panic(err)
