@@ -42,6 +42,7 @@ func (pm *PersonDbModel) Edit(id int, newP Person) (Person, error) {
 	p.Name = newP.Name
 	p.Email = newP.Email
 	p.Password = newP.Password
+	p.Token = newP.Token
 	err = pm.db.Save(&p).Error
 	return p, err
 }

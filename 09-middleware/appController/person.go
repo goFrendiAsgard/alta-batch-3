@@ -42,7 +42,11 @@ func (pc PersonController) Login(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "cannot login")
 	}
 	person.Token = token
-	pc.model.Edit(int(person.ID), person)
+	person, err = pc.model.Edit(int(person.ID), person)
+	if err != nil {
+		fmt.Println(err)
+		return c.String(http.StatusInternalServerError, "cannot add token")
+	}
 	return c.JSON(http.StatusOK, person)
 }
 
