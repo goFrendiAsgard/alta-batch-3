@@ -1,4 +1,4 @@
-package model
+package appModel
 
 type PersonModel interface {
 	GetAll() ([]Person, error)

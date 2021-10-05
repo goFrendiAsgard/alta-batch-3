@@ -1,4 +1,4 @@
-package model
+package appModel
 
 import "gorm.io/gorm"
 

@@ -1,20 +1,20 @@
-package controller
+package appController
 
 import (
 	"fmt"
 	"net/http"
 	"strconv"
 
-	"gofrendi/structureExample/model"
+	"gofrendi/structureExample/appModel"
 
 	"github.com/labstack/echo/v4"
 )
 
 type PersonController struct {
-	model model.PersonModel
+	model appModel.PersonModel
 }
 
-func NewPersonController(m model.PersonModel) PersonController {
+func NewPersonController(m appModel.PersonModel) PersonController {
 	return PersonController{model: m}
 }
 
@@ -27,7 +27,7 @@ func (pc PersonController) GetAll(c echo.Context) error {
 }
 
 func (pc PersonController) Add(c echo.Context) error {
-	var person model.Person
+	var person appModel.Person
 	if err := c.Bind(&person); err != nil {
 		fmt.Println(err)
 		return c.String(http.StatusBadRequest, "invalid person data")
@@ -45,7 +45,7 @@ func (pc PersonController) Edit(c echo.Context) error {
 		fmt.Println(err)
 		return c.String(http.StatusBadRequest, "invalid person id")
 	}
-	var person model.Person
+	var person appModel.Person
 	if err := c.Bind(&person); err != nil {
 		fmt.Println(err)
 		return c.String(http.StatusBadRequest, "invalid person data")
