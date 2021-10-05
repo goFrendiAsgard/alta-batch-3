@@ -15,6 +15,12 @@ func NewPersonDbModel(db *gorm.DB) *PersonDbModel {
 	}
 }
 
+func (pm *PersonDbModel) GetByEmailAndPassword(email string, password string) (Person, error) {
+	p := Person{}
+	err := pm.db.Where("email = ? AND password = ?", email, password).First(&p).Error
+	return p, err
+}
+
 func (pm *PersonDbModel) GetAll() ([]Person, error) {
 	var allPerson []Person
 	err := pm.db.Find(&allPerson).Error

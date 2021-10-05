@@ -12,6 +12,16 @@ func NewPersonMemModel() *PersonMemModel {
 	}
 }
 
+func (pm *PersonMemModel) GetByEmailAndPassword(email string, password string) (Person, error) {
+	var person = Person{}
+	for _, person = range pm.data {
+		if person.Email == email && person.Password == password {
+			return person, nil
+		}
+	}
+	return person, fmt.Errorf("person not found")
+}
+
 func (pm *PersonMemModel) GetAll() ([]Person, error) {
 	return pm.data, nil
 }
