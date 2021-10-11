@@ -63,7 +63,7 @@
 				
 				<option value="file3">gofrendi/structureExample/appController/initTestEcho.go (100.0%)</option>
 				
-				<option value="file4">gofrendi/structureExample/appController/person.go (38.1%)</option>
+				<option value="file4">gofrendi/structureExample/appController/person.go (45.2%)</option>
 				
 				</select>
 			</div>
@@ -120,7 +120,7 @@ import (
         "github.com/labstack/echo/v4/middleware"
 )
 
-func HandleRoutes(e *echo.Echo, jwtSecret string, personModel appModel.PersonModel) PersonController <span class="cov10" title="6">{
+func HandleRoutes(e *echo.Echo, jwtSecret string, personModel appModel.PersonModel) PersonController <span class="cov10" title="7">{
         e.GET("/", Hello)
         e.GET("/add/:firstNum/:secondNum/", Add)
         e.GET("/add/:firstNum/:secondNum", Add)
@@ -174,7 +174,7 @@ import (
         "github.com/labstack/echo/v4"
 )
 
-func initTestEcho() (e *echo.Echo, pc PersonController) <span class="cov10" title="6">{
+func initTestEcho() (e *echo.Echo, pc PersonController) <span class="cov10" title="7">{
         personModel := appModel.NewPersonMemModel()
         e = echo.New()
         appMiddleware.AddGlobalMiddlewares(e)
@@ -207,14 +207,14 @@ type PersonController struct {
         jwtSecret string
 }
 
-func NewPersonController(jwtSecret string, m appModel.PersonModel) PersonController <span class="cov10" title="6">{
+func NewPersonController(jwtSecret string, m appModel.PersonModel) PersonController <span class="cov10" title="7">{
         return PersonController{
                 jwtSecret: jwtSecret,
                 model:     m,
         }
 }</span>
 
-func (pc PersonController) Login(c echo.Context) error <span class="cov1" title="1">{
+func (pc PersonController) Login(c echo.Context) error <span class="cov4" title="2">{
         loginInfo := LoginInfo{}
         c.Bind(&amp;loginInfo)
         person, err := pc.model.GetByEmailAndPassword(loginInfo.Email, loginInfo.Password)
@@ -222,27 +222,27 @@ func (pc PersonController) Login(c echo.Context) error <span class="cov1" title=
                 fmt.Println(err)
                 return c.String(http.StatusBadRequest, "cannot login")
         }</span>
-        <span class="cov1" title="1">token, err := appMiddleware.CreateToken(int(person.ID), pc.jwtSecret)
+        <span class="cov4" title="2">token, err := appMiddleware.CreateToken(int(person.ID), pc.jwtSecret)
         if err != nil </span><span class="cov0" title="0">{
                 fmt.Println(err)
                 return c.String(http.StatusBadRequest, "cannot login")
         }</span>
-        <span class="cov1" title="1">person.Token = token
+        <span class="cov4" title="2">person.Token = token
         person, err = pc.model.Edit(int(person.ID), person)
         if err != nil </span><span class="cov0" title="0">{
                 fmt.Println(err)
                 return c.String(http.StatusInternalServerError, "cannot add token")
         }</span>
-        <span class="cov1" title="1">return c.JSON(http.StatusOK, person)</span>
+        <span class="cov4" title="2">return c.JSON(http.StatusOK, person)</span>
 }
 
-func (pc PersonController) GetAll(c echo.Context) error <span class="cov0" title="0">{
+func (pc PersonController) GetAll(c echo.Context) error <span class="cov1" title="1">{
         allPersons, err := pc.model.GetAll()
         if err != nil </span><span class="cov0" title="0">{
                 fmt.Println(err)
                 return c.String(http.StatusInternalServerError, "cannot get persons")
         }</span>
-        <span class="cov0" title="0">return c.JSON(http.StatusOK, allPersons)</span>
+        <span class="cov1" title="1">return c.JSON(http.StatusOK, allPersons)</span>
 }
 
 func (pc PersonController) Add(c echo.Context) error <span class="cov1" title="1">{

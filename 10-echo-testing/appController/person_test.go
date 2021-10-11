@@ -3,10 +3,13 @@ package appController
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"gofrendi/structureExample/appModel"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func TestPersonAddValid(t *testing.T) {
@@ -137,5 +140,34 @@ func TestGetAll(t *testing.T) {
 	if p.Token == "" {
 		t.Errorf("token expected")
 	}
+	token := p.Token
 
+	// get all request
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", token))
+	req.Header.Set("Content-Type", "application/json")
+	rec := httptest.NewRecorder()
+	context := e.NewContext(req, rec)
+	context.SetPath("/persons")
+
+	// get all
+	if err := middleware.JWT([]byte(pc.jwtSecret))(pc.GetAll)(context); err != nil {
+		t.Errorf("should not get error, get error: %s", err)
+		return
+	}
+
+	// compare status
+	if rec.Code != 200 {
+		t.Errorf("should return 200, get: %d", rec.Code)
+	}
+
+	var pList []appModel.Person
+	if err := json.Unmarshal(rec.Body.Bytes(), &pList); err != nil {
+		t.Errorf("unmarshalling returned person list failed")
+	}
+
+	expectedPListLength := 2
+	if len(pList) != expectedPListLength {
+		t.Errorf("expecting pList's length to be %d, get %d, data: %#v", expectedPListLength, len(pList), pList)
+	}
 }
