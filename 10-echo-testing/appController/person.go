@@ -51,6 +51,8 @@ func (pc PersonController) Login(c echo.Context) error {
 }
 
 func (pc PersonController) GetAll(c echo.Context) error {
+	personId := appMiddleware.ExtractTokenUserId(c)
+	fmt.Println("😸 Current user id: ", personId)
 	allPersons, err := pc.model.GetAll()
 	if err != nil {
 		fmt.Println(err)

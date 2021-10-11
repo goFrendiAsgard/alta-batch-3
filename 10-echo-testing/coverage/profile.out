@@ -1,4 +1,9 @@
 mode: atomic
+gofrendi/structureExample/appController/add.go:12.32,14.16 2 3
+gofrendi/structureExample/appController/add.go:17.2,18.16 2 2
+gofrendi/structureExample/appController/add.go:21.2,22.40 2 1
+gofrendi/structureExample/appController/add.go:14.16,16.3 1 1
+gofrendi/structureExample/appController/add.go:18.16,20.3 1 1
 gofrendi/structureExample/appController/handleRoutes.go:10.102,39.2 15 7
 gofrendi/structureExample/appController/hello.go:9.34,11.2 1 1
 gofrendi/structureExample/appController/initTestEcho.go:10.57,17.2 6 7
@@ -25,8 +30,3 @@ gofrendi/structureExample/appController/person.go:90.2,90.38 1 0
 gofrendi/structureExample/appController/person.go:77.16,80.3 2 0
 gofrendi/structureExample/appController/person.go:82.40,85.3 2 0
 gofrendi/structureExample/appController/person.go:87.16,89.3 1 0
-gofrendi/structureExample/appController/add.go:12.32,14.16 2 3
-gofrendi/structureExample/appController/add.go:17.2,18.16 2 2
-gofrendi/structureExample/appController/add.go:21.2,22.40 2 1
-gofrendi/structureExample/appController/add.go:14.16,16.3 1 1
-gofrendi/structureExample/appController/add.go:18.16,20.3 1 1

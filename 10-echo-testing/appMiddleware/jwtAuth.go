@@ -17,12 +17,17 @@ func CreateToken(personId int, jwtSecret string) (string, error) {
 
 }
 
-func ExtractTokenUserId(e echo.Context) int {
-	token := e.Get("user").(*jwt.Token)
-	if token.Valid {
+func ExtractTokenUserId(c echo.Context) int {
+	token := c.Get("user").(*jwt.Token)
+	if token != nil && token.Valid {
 		claims := token.Claims.(jwt.MapClaims)
-		personId := claims["personId"].(int)
-		return personId
+		personId := claims["personId"]
+		switch personId.(type) {
+		case float64:
+			return int(personId.(float64))
+		default:
+			return personId.(int)
+		}
 	}
 	return -1 // invalid user
 }
