@@ -11,6 +11,7 @@ import (
 
 func TestPersonAddValid(t *testing.T) {
 	e, pc := initTestEcho()
+
 	// compose request
 	newPerson, err := json.Marshal(map[string]string{
 		"name":     "dono",
@@ -25,14 +26,18 @@ func TestPersonAddValid(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	c.SetPath("/persons")
+
 	// send request
 	if err = pc.Add(c); err != nil {
 		t.Errorf("should not get error, get error: %s", err)
 		return
 	}
+
+	// compare status
 	if rec.Code != 200 {
 		t.Errorf("should return 200, get: %d", rec.Code)
 	}
+
 	// compare response
 	var p appModel.Person
 	if err = json.Unmarshal(rec.Body.Bytes(), &p); err != nil {
@@ -50,4 +55,87 @@ func TestPersonAddValid(t *testing.T) {
 	if p.Password != expectedPassword {
 		t.Errorf("person pasword should be %s, get: %s", expectedPassword, p.Password)
 	}
+}
+
+func TestPersonLogin(t *testing.T) {
+	e, pc := initTestEcho()
+	person1 := appModel.Person{Name: "dono", Email: "dono@warkop.id", Password: "rahasia"}
+	person1.ID = uint(1)
+	pc.model.Add(person1)
+	person2 := appModel.Person{Name: "kasino", Email: "kasino@warkop.id", Password: "rahasia"}
+	person2.ID = uint(2)
+	pc.model.Add(person2)
+
+	// login request
+	loginInfo, err := json.Marshal(LoginInfo{Email: "dono@warkop.id", Password: "rahasia"})
+	if err != nil {
+		t.Errorf("marshalling new person failed")
+	}
+	req := httptest.NewRequest(http.MethodPost, "/", bytes.NewBuffer(loginInfo))
+	req.Header.Set("Content-Type", "application/json")
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	c.SetPath("/login")
+
+	// send request
+	if err := pc.Login(c); err != nil {
+		t.Errorf("should not get error, get error: %s", err)
+		return
+	}
+
+	// compare status
+	if rec.Code != 200 {
+		t.Errorf("should return 200, get: %d", rec.Code)
+	}
+
+	// compare response
+	var p appModel.Person
+	if err := json.Unmarshal(rec.Body.Bytes(), &p); err != nil {
+		t.Errorf("unmarshalling returned person failed")
+	}
+	if p.Token == "" {
+		t.Errorf("token expected")
+	}
+}
+
+func TestGetAll(t *testing.T) {
+	e, pc := initTestEcho()
+	person1 := appModel.Person{Name: "dono", Email: "dono@warkop.id", Password: "rahasia"}
+	person1.ID = uint(1)
+	pc.model.Add(person1)
+	person2 := appModel.Person{Name: "kasino", Email: "kasino@warkop.id", Password: "rahasia"}
+	person2.ID = uint(2)
+	pc.model.Add(person2)
+
+	// login request
+	loginInfo, err := json.Marshal(LoginInfo{Email: "dono@warkop.id", Password: "rahasia"})
+	if err != nil {
+		t.Errorf("marshalling new person failed")
+	}
+	loginReq := httptest.NewRequest(http.MethodPost, "/", bytes.NewBuffer(loginInfo))
+	loginReq.Header.Set("Content-Type", "application/json")
+	loginRec := httptest.NewRecorder()
+	loginContext := e.NewContext(loginReq, loginRec)
+	loginContext.SetPath("/login")
+
+	// send request
+	if err := pc.Login(loginContext); err != nil {
+		t.Errorf("should not get error, get error: %s", err)
+		return
+	}
+
+	// compare status
+	if loginRec.Code != 200 {
+		t.Errorf("should return 200, get: %d", loginRec.Code)
+	}
+
+	// compare response
+	var p appModel.Person
+	if err := json.Unmarshal(loginRec.Body.Bytes(), &p); err != nil {
+		t.Errorf("unmarshalling returned person failed")
+	}
+	if p.Token == "" {
+		t.Errorf("token expected")
+	}
+
 }
