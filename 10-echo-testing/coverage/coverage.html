@@ -63,7 +63,7 @@
 				
 				<option value="file3">gofrendi/structureExample/appController/initTestEcho.go (100.0%)</option>
 				
-				<option value="file4">gofrendi/structureExample/appController/person.go (45.2%)</option>
+				<option value="file4">gofrendi/structureExample/appController/person.go (47.7%)</option>
 				
 				</select>
 			</div>
@@ -237,6 +237,8 @@ func (pc PersonController) Login(c echo.Context) error <span class="cov4" title=
 }
 
 func (pc PersonController) GetAll(c echo.Context) error <span class="cov1" title="1">{
+        currentLoginPersonId := appMiddleware.ExtractTokenUserId(c)
+        fmt.Println("😸 Current user id: ", currentLoginPersonId)
         allPersons, err := pc.model.GetAll()
         if err != nil </span><span class="cov0" title="0">{
                 fmt.Println(err)
