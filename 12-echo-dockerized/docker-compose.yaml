@@ -1,0 +1,28 @@
+services:
+
+  app:
+    build: .
+    restart: always
+    depends_on:
+      - appDb
+    environment:
+      HTTP_PORT: 8080
+      CONNECTION_STRING: root:toor@tcp(appDb:3306)/alta?charset=utf8&parseTime=True&loc=Local
+      STORAGE: db
+
+  appDb:
+    image: bitnami/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: alta
+    ports:
+      - 3306:3306
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080

@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>appController: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">gofrendi/structureExample/appController/add.go (100.0%)</option>
+				
+				<option value="file1">gofrendi/structureExample/appController/handleRoutes.go (100.0%)</option>
+				
+				<option value="file2">gofrendi/structureExample/appController/hello.go (100.0%)</option>
+				
+				<option value="file3">gofrendi/structureExample/appController/initTestEcho.go (100.0%)</option>
+				
+				<option value="file4">gofrendi/structureExample/appController/person.go (47.7%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package appController
+
+import (
+        "fmt"
+        "gofrendi/structureExample/arithmetic"
+        "net/http"
+        "strconv"
+
+        "github.com/labstack/echo/v4"
+)
+
+func Add(c echo.Context) error <span class="cov10" title="3">{
+        firstNum, err := strconv.Atoi(c.Param("firstNum"))
+        if err != nil </span><span class="cov1" title="1">{
+                return c.String(http.StatusBadRequest, "firstNum invalid")
+        }</span>
+        <span class="cov6" title="2">secondNum, err := strconv.Atoi(c.Param("secondNum"))
+        if err != nil </span><span class="cov1" title="1">{
+                return c.String(http.StatusBadRequest, "secondNum invalid")
+        }</span>
+        <span class="cov1" title="1">result := fmt.Sprintf("%d", arithmetic.Add(firstNum, secondNum))
+        return c.String(http.StatusOK, result)</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package appController
+
+import (
+        "gofrendi/structureExample/appModel"
+
+        "github.com/labstack/echo/v4"
+        "github.com/labstack/echo/v4/middleware"
+)
+
+func HandleRoutes(e *echo.Echo, jwtSecret string, personModel appModel.PersonModel) PersonController <span class="cov10" title="7">{
+        e.GET("/", Hello)
+        e.GET("/add/:firstNum/:secondNum/", Add)
+        e.GET("/add/:firstNum/:secondNum", Add)
+
+        personController := NewPersonController(jwtSecret, personModel)
+        e.POST("/persons", personController.Add)
+        e.POST("/persons/", personController.Add)
+
+        e.POST("/login", personController.Login)
+        e.POST("/login/", personController.Login)
+
+        eAuth := e.Group("")
+
+        // Basic Auth ------------------
+        // curl --location --request GET 'localhost:8080/persons' \
+        // --header 'Authorization: Basic YWRtaW46YWRtaW4='
+        // Code:
+        // eAuth.Use(middleware.BasicAuth(appMiddleware.DummyBasicAuth))
+        // eAuth.Use(middleware.BasicAuth(appMiddleware.MakePersonBasicAuth(personModel)))
+
+        eAuth.Use(middleware.JWT([]byte(jwtSecret)))
+
+        eAuth.GET("/persons", personController.GetAll)
+        eAuth.GET("/persons/", personController.GetAll)
+        eAuth.PUT("/persons/:id", personController.Edit)
+        eAuth.PUT("/persons/:id/", personController.Edit)
+
+        return personController
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package appController
+
+import (
+        "net/http"
+
+        "github.com/labstack/echo/v4"
+)
+
+func Hello(c echo.Context) error <span class="cov8" title="1">{
+        return c.String(http.StatusOK, "hello world")
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package appController
+
+import (
+        "gofrendi/structureExample/appMiddleware"
+        "gofrendi/structureExample/appModel"
+
+        "github.com/labstack/echo/v4"
+)
+
+func initTestEcho() (e *echo.Echo, pc PersonController) <span class="cov10" title="7">{
+        personModel := appModel.NewPersonMemModel()
+        e = echo.New()
+        appMiddleware.AddGlobalMiddlewares(e)
+        jwtSecret := "rahasiaBanget"
+        pc = HandleRoutes(e, jwtSecret, personModel)
+        return e, pc
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package appController
+
+import (
+        "fmt"
+        "net/http"
+        "strconv"
+
+        "gofrendi/structureExample/appMiddleware"
+        "gofrendi/structureExample/appModel"
+
+        "github.com/labstack/echo/v4"
+)
+
+type LoginInfo struct {
+        Email    string `json:"email"`
+        Password string `json:"password"`
+}
+
+type PersonController struct {
+        model     appModel.PersonModel
+        jwtSecret string
+}
+
+func NewPersonController(jwtSecret string, m appModel.PersonModel) PersonController <span class="cov10" title="7">{
+        return PersonController{
+                jwtSecret: jwtSecret,
+                model:     m,
+        }
+}</span>
+
+func (pc PersonController) Login(c echo.Context) error <span class="cov4" title="2">{
+        loginInfo := LoginInfo{}
+        c.Bind(&amp;loginInfo)
+        person, err := pc.model.GetByEmailAndPassword(loginInfo.Email, loginInfo.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return c.String(http.StatusBadRequest, "cannot login")
+        }</span>
+        <span class="cov4" title="2">token, err := appMiddleware.CreateToken(int(person.ID), pc.jwtSecret)
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return c.String(http.StatusBadRequest, "cannot login")
+        }</span>
+        <span class="cov4" title="2">person.Token = token
+        person, err = pc.model.Edit(int(person.ID), person)
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return c.String(http.StatusInternalServerError, "cannot add token")
+        }</span>
+        <span class="cov4" title="2">return c.JSON(http.StatusOK, person)</span>
+}
+
+func (pc PersonController) GetAll(c echo.Context) error <span class="cov1" title="1">{
+        currentLoginPersonId := appMiddleware.ExtractTokenUserId(c)
+        fmt.Println("😸 Current user id: ", currentLoginPersonId)
+        allPersons, err := pc.model.GetAll()
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return c.String(http.StatusInternalServerError, "cannot get persons")
+        }</span>
+        <span class="cov1" title="1">return c.JSON(http.StatusOK, allPersons)</span>
+}
+
+func (pc PersonController) Add(c echo.Context) error <span class="cov1" title="1">{
+        var person appModel.Person
+        if err := c.Bind(&amp;person); err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return c.String(http.StatusBadRequest, "invalid person data")
+        }</span>
+        <span class="cov1" title="1">person, err := pc.model.Add(person)
+        if err != nil </span><span class="cov0" title="0">{
+                return c.String(http.StatusInternalServerError, "cannot add person")
+        }</span>
+        <span class="cov1" title="1">return c.JSON(http.StatusOK, person)</span>
+}
+
+func (pc PersonController) Edit(c echo.Context) error <span class="cov0" title="0">{
+        personId, err := strconv.Atoi(c.Param("id"))
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return c.String(http.StatusBadRequest, "invalid person id")
+        }</span>
+        <span class="cov0" title="0">var person appModel.Person
+        if err := c.Bind(&amp;person); err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return c.String(http.StatusBadRequest, "invalid person data")
+        }</span>
+        <span class="cov0" title="0">person, err = pc.model.Edit(personId, person)
+        if err != nil </span><span class="cov0" title="0">{
+                return c.String(http.StatusInternalServerError, "cannot edit person")
+        }</span>
+        <span class="cov0" title="0">return c.JSON(http.StatusOK, person)</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
