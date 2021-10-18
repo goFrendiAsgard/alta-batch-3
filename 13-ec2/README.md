@@ -46,3 +46,9 @@ docker stop alta-nginx
 # copy README.md dari komputer lokal ke Ec2 di path /home/ubuntu sebagai user ubuntu dengan permission key yang ada di lenovo.pem
 scp -i ~/lenovo.pem README.md ubuntu@ec2-54-179-44-145.ap-southeast-1.compute.amazonaws.com:/home/ubuntu
 ```
+
+# Download file dari sumber eksternal
+
+```sh
+# wget <url>
+```
