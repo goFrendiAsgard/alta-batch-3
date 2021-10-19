@@ -38,17 +38,28 @@ docker start alta-nginx
 docker stop alta-nginx
 ```
 
-# Copy Paste dari/ke EC2 via ssh
+# Copy Paste file dari/ke EC2 via ssh
 
 ```sh
 # scp [-r] -i <permission.pem> [user@host:]<path> [user@host:]<path>
 
 # copy README.md dari komputer lokal ke Ec2 di path /home/ubuntu sebagai user ubuntu dengan permission key yang ada di lenovo.pem
 scp -i ~/lenovo.pem README.md ubuntu@ec2-54-179-44-145.ap-southeast-1.compute.amazonaws.com:/home/ubuntu
+
+# bisa juga pakai rsync
 ```
 
 # Download file dari sumber eksternal
 
 ```sh
 # wget <url>
+```
+
+# Install docker compose
+
+```sh
+pip3 install docker-compose
+
+# docker-compose up -d
+# docker-compose down
 ```
