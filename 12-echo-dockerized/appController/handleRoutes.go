@@ -19,8 +19,6 @@ func HandleRoutes(e *echo.Echo, jwtSecret string, personModel appModel.PersonMod
 	e.POST("/login", personController.Login)
 	e.POST("/login/", personController.Login)
 
-	eAuth := e.Group("")
-
 	// Basic Auth ------------------
 	// curl --location --request GET 'localhost:8080/persons' \
 	// --header 'Authorization: Basic YWRtaW46YWRtaW4='
@@ -28,12 +26,12 @@ func HandleRoutes(e *echo.Echo, jwtSecret string, personModel appModel.PersonMod
 	// eAuth.Use(middleware.BasicAuth(appMiddleware.DummyBasicAuth))
 	// eAuth.Use(middleware.BasicAuth(appMiddleware.MakePersonBasicAuth(personModel)))
 
-	eAuth.Use(middleware.JWT([]byte(jwtSecret)))
+	jwtMiddleware := middleware.JWT([]byte(jwtSecret))
 
-	eAuth.GET("/persons", personController.GetAll)
-	eAuth.GET("/persons/", personController.GetAll)
-	eAuth.PUT("/persons/:id", personController.Edit)
-	eAuth.PUT("/persons/:id/", personController.Edit)
+	e.GET("/persons", personController.GetAll, jwtMiddleware)
+	e.GET("/persons/", personController.GetAll, jwtMiddleware)
+	e.PUT("/persons/:id", personController.Edit, jwtMiddleware)
+	e.PUT("/persons/:id/", personController.Edit, jwtMiddleware)
 
 	return personController
 }
