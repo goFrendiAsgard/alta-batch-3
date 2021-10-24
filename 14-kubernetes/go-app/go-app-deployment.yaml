@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-app
+spec:
+  selector:
+    matchLabels:
+      app: go-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: go-app
+    spec:
+      containers:
+        - image: gofrendi/alta-batch-3-go-app:latest
+          name: go-app
+          env:
+            - name: HTTP_PORT
+              value: "8080"
+            - name: CONNECTION_STRING
+              value: "root:toor@tcp(mysql:3306)/alta?charset=utf8&parseTime=True&loc=Local"
+            - name: STORAGE
+              value: "db"
+          ports:
+            - containerPort: 8080
+              name: go-app
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-app
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: go-app
