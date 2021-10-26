@@ -10,7 +10,7 @@
         `$Env:KUBECONFIG=("$HOME\Downloads\okteto-kube.config;$Env:KUBECONFIG;$HOME\.kube\config")`
         - Supaya tidak perlu menjalankan perintah di atas setiap kali hendak manage okteto:
         Tambahkan script di atas ke `~/.bashrc` atau `~/.zshrc` (tergantung terminal yg dipakai)
-        - Jika yang di atas gagal, salin isi okteto-kube.config ke `~/.kube/config
+        - Jika yang di atas gagal, salin isi okteto-kube.config ke `~/.kube/config`
 * Pastikan `kubectl config get-contexts` mengarah ke okteto, jika tidak lakukan `kubectl config use-context <context-name>`
 * Deploy mysql (`./mysql/deploy.sh`)
 * Deploy go app (`./go-app/deploy.sh`)
