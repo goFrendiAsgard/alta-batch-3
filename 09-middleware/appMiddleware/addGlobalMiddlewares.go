@@ -7,7 +7,7 @@ import (
 
 func AddGlobalMiddlewares(e *echo.Echo) {
 	// Log middleware
-	//e.Use(middleware.Logger())
+	// e.Use(middleware.Logger())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
 	}))
