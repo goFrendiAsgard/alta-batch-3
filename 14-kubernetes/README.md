@@ -8,7 +8,7 @@
     - Hubungkan kubectl ke cluster okteto dengan cara:
         - Menjalankan ini di terminal:
             - Windows: `$Env:KUBECONFIG=("c:\\User\<user-name>\Downloads\okteto-kube.config;$Env:KUBECONFIG;$HOME\.kube\config")`
-            - Linux: `export KUBECONFIG=/mnt/c/Users/<user-name>/Downloads/okteto-kube.config:$KUBECONFIG/$HOME/.kube/config`
+            - Linux: `export KUBECONFIG=/mnt/c/Users/<user-name>/Downloads/okteto-kube.config:$KUBECONFIG:$HOME/.kube/config`
         - Supaya tidak perlu menjalankan perintah di atas setiap kali hendak manage okteto:
         Tambahkan script di atas ke `~/.bashrc` atau `~/.zshrc` (tergantung terminal yg dipakai)
         - Jika yang di atas gagal, salin isi okteto-kube.config ke `~/.kube/config`

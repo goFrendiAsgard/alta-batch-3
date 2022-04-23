@@ -37,12 +37,15 @@ mv sonar-scanner-cli-4.7.0.2747 sonar-scanner
 
 # put this on ~/.bashrc or ~/.zshrc, or just run it
 export PATH=$PATH:$HOME/sonar-scanner/bin
+
+# on windows:
+# $Env:PATH=($Env:PATH;$HOME/sonar-scanner/bin)
 ```
 
 ```bash
 # run
 cd sample
-sonar-scanner -Dsonar.login=03600b63092ac8e8e65a4e5469886e61b0cf7871
+sonar-scanner -Dsonar.host.url=http://localhost:9000 -Dsonar.login=03600b63092ac8e8e65a4e5469886e61b0cf7871
 ```
 
 ## Docker
