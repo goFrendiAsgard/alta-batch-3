@@ -22,6 +22,7 @@ Create a file named `sonar-project.properties`.
 
 ```
 sonar.projectKey=my:project
+sonar.go.coverage.reportPaths=cover.out
 ```
 
 # Run sonar-scanner
