@@ -45,6 +45,7 @@ export PATH=$PATH:$HOME/sonar-scanner/bin
 ```bash
 # run
 cd sample
+go test -coverprofile=cover.out ./...
 sonar-scanner -Dsonar.host.url=http://localhost:9000 -Dsonar.login=03600b63092ac8e8e65a4e5469886e61b0cf7871
 ```
 
