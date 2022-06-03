@@ -6,9 +6,11 @@ import (
 	"gofrendi/structureExample/appController"
 	"gofrendi/structureExample/appMiddleware"
 	"gofrendi/structureExample/appModel"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -17,16 +19,26 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	isTesting := "0"
+	isTesting = os.Getenv("IS_TESTING")
 
 	// personModel can be either personMemModel or personDbModel, depends on the configuration
 	var personModel appModel.PersonModel
 	switch cfg.Storage {
 	case "db":
-		db, err := gorm.Open(mysql.Open(cfg.ConnectionString), &gorm.Config{})
-		if err != nil {
-			panic(err)
+		if isTesting == "1" {
+			db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+			if err != nil {
+				panic(err)
+			}
+			personModel = appModel.NewPersonDbModel(db)
+		} else {
+			db, err := gorm.Open(mysql.Open(cfg.ConnectionString), &gorm.Config{})
+			if err != nil {
+				panic(err)
+			}
+			personModel = appModel.NewPersonDbModel(db)
 		}
-		personModel = appModel.NewPersonDbModel(db)
 	case "mem":
 		personModel = appModel.NewPersonMemModel()
 	}
